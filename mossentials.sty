@@ -1,0 +1,120 @@
+% Package declaration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mossentials}[2017/07/09 Moritz's essentials package]
+
+
+%=========%
+% Options %
+%=========%
+% Set language
+\newcommand{\lang}{english}
+\newcommand{\langcode}{UK}
+\DeclareOption{german}{
+    \renewcommand{\lang}{ngerman}
+    \renewcommand{\langcode}{DE}
+}
+
+% Set spacing
+\DeclareOption{onehalfspacing}{\RequirePackage[onehalfspacing]{setspace}}
+\DeclareOption{doublespacing}{\RequirePackage[doublespacing]{setspace}}
+
+% Colorlinks
+\newcommand{\colorlinks}{false}
+\DeclareOption{colorlinks}{\renewcommand{\colorlinks}{true}}
+
+% Font
+\newcommand{\customfont}{kpfonts}
+\DeclareOption{lmodern}{\renewcommand{\customfont}{lmodern}} % Latex default font, but improved
+\DeclareOption{gfsdidot}{\renewcommand{\customfont}{gfsdidot}} % Font GFS Didot, very nice, but does not work with mathtools and amsmath
+\DeclareOption{fourier}{\renewcommand{\customfont}{fourier}} % Adobe Utopia font
+\DeclareOption{libertine}{\renewcommand{\customfont}{libertine}} % Nice sans serif font
+
+% End of options
+\DeclareOption*{\PackageWarning{mossentials}{Unknown ‘\CurrentOption’}}
+\ProcessOptions\relax
+
+
+%====================%
+% Important packages %
+%====================%
+\RequirePackage[l2tabu, orthodox]{nag} % Warns of deprecated LaTeX constructs
+\RequirePackage[T1] {fontenc} 
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[\lang]{babel} % Language specific small stuff (formatting and so on)
+\RequirePackage{\customfont} % Set the font
+\RequirePackage[
+backend=biber,
+hyperref=true,
+doi=true,
+url=false,
+eprint=false,
+style=numeric-comp % Haven't decided on a style yet
+]{biblatex} % Biblatex
+
+
+%========================%
+% Miscellaneous packages %
+%========================%
+\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel
+\RequirePackage{color} % Colors
+\RequirePackage{colortbl} % Colors in table
+\RequirePackage[table,xcdraw]{xcolor} % Allow colored text
+\RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
+\RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
+\RequirePackage{microtype} % Better font spacing and stuff
+\RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry} % StyleGuide standards
+\RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
+\RequirePackage[obeyDraft]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
+
+
+%=====================%
+% Chemistry and maths %
+%=====================%
+\RequirePackage{chemformula} % Stuff like \ch{MgCl2}
+\RequirePackage{chemmacros} % Extension of chemformula, most notably contains \iupac{}, very useful for long IUPAC names containing heteroatoms, stereochemistry, greek letters and stuff. Also allows line breaking
+\RequirePackage{chemfig} % Structural formulas drawn with tikz. Not so easy to use, but looks very nice. Still looking for an easier alternative
+\RequirePackage{mathtools} % Math stuff
+\RequirePackage{amsfonts} % Math stuff (continued)
+\RequirePackage{amssymb} % Math stuff (continued)
+\RequirePackage[per-mode=reciprocal-positive-first,locale=\langcode]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
+
+
+%=========================%
+% Floats, figures, images %
+%=========================%
+\RequirePackage[section]{placeins} % Floats can not be printed behind the next section.
+\RequirePackage{subfig} % Subfigures, subcaptions
+\RequirePackage{caption} % Better captions, more customisable
+\RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
+\RequirePackage[
+    pdfpagelabels=true,
+    plainpages=false,
+    colorlinks=\colorlinks, % make links (as in TOC or references to figures) font red instead of drawing a red box around them. Colorlinks are also visible in print, boxes are not
+    bookmarks=true,
+    pdfview=FitB
+]{hyperref} % Required for the hyperlinks within the PDF
+\RequirePackage{cleveref} % Nice referencing with \cref{}
+
+
+%==============%
+% Biochemistry %
+%==============%
+\RequirePackage{seqsplit} % Split long single words in tables (such as DNA sequences) using \seqsplit{text}
+%\RequirePackage{pgfmolbio} % Super nice display of sequencing data and stuff like that. But I hardly use it, so it's disabled
+
+
+%============%
+%Table stuff %
+%============%
+\RequirePackage{booktabs} % \toprule, \midrule, \bottomrule, nicer tables (must have!)
+\RequirePackage{multirow} % \multicolumn{num_of_columns}{X}{Content} and \multirow{num_of_rows}{X}{Content}
+\RequirePackage{multirow,bigdelim} % Braces spanning multiple rows
+\RequirePackage{xltabular} % A combination of longtable and tabularx. Useful for multi=page tables
+\RequirePackage{csvsimple} % Read csv files as tables
+
+
+%======%
+% URLs %
+%======%
+\RequirePackage{url}
+\urlstyle{same}
