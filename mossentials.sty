@@ -6,6 +6,10 @@
 %=========%
 % Options %
 %=========%
+% The available options for now are:
+% Fonts: lmodern, gfsdidot, fourier, libertine
+% colorlinks
+% onehalfspacing, doublespacing
 % Set language
 \newcommand{\lang}{english}
 \newcommand{\langcode}{UK}
@@ -76,7 +80,7 @@ style=numeric-comp % Haven't decided on a style yet
 \RequirePackage{mathtools} % Math stuff
 \RequirePackage{amsfonts} % Math stuff (continued)
 \RequirePackage{amssymb} % Math stuff (continued)
-\RequirePackage[per-mode=reciprocal-positive-first,locale=\langcode]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
+\RequirePackage[per-mode=reciprocal-positive-first,locale=\langcode,range-units=single,list-units=single]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
 
 
 %=========================%
@@ -118,3 +122,5 @@ style=numeric-comp % Haven't decided on a style yet
 %======%
 \RequirePackage{url}
 \urlstyle{same}
+
+\endinput
