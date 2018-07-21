@@ -7,10 +7,10 @@
 % Options %
 %=========%
 % The available options for now are:
-% Fonts: lmodern, gfsdidot, fourier, libertine
+% Fonts: lmodern, gfsdidot, fourier, libertine, garamond
 % colorlinks
 % onehalfspacing, doublespacing
-% Set language
+% german
 \newcommand{\lang}{english}
 \newcommand{\langcode}{UK}
 \DeclareOption{german}{
@@ -31,6 +31,7 @@
 \DeclareOption{lmodern}{\renewcommand{\customfont}{lmodern}} % Latex default font, but improved
 \DeclareOption{gfsdidot}{\renewcommand{\customfont}{gfsdidot}} % Font GFS Didot, very nice, but does not work with mathtools and amsmath
 \DeclareOption{fourier}{\renewcommand{\customfont}{fourier}} % Adobe Utopia font
+\DeclareOption{garamond}{\renewcommand{\customfont}{ebgaramond-maths}} % Garamond
 \DeclareOption{libertine}{\renewcommand{\customfont}{libertine}} % Nice sans serif font
 
 % End of options
@@ -80,7 +81,13 @@ style=numeric-comp % Haven't decided on a style yet
 \RequirePackage{mathtools} % Math stuff
 \RequirePackage{amsfonts} % Math stuff (continued)
 \RequirePackage{amssymb} % Math stuff (continued)
-\RequirePackage[per-mode=reciprocal-positive-first,locale=\langcode,range-units=single,list-units=single]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
+\RequirePackage[
+per-mode=reciprocal-positive-first, % Format of units (fraction or reciprocal)
+locale=\langcode, % Set locale
+range-units=single, % Don't repeat units in number ranges
+list-units=single, % Don't repeat units in number lists
+detect-mode=true % Automatically detect whether it is in text or math mode
+]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
 
 
 %=========================%
