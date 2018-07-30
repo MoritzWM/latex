@@ -66,7 +66,7 @@ style=numeric-comp % Haven't decided on a style yet
 \RequirePackage[table,xcdraw]{xcolor} % Allow colored text
 \RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
 \RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
-\RequirePackage{microtype} % Better font spacing and stuff
+\RequirePackage[final]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
 \RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry} % StyleGuide standards
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
 \RequirePackage[obeyDraft]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
@@ -86,8 +86,13 @@ per-mode=reciprocal-positive-first, % Format of units (fraction or reciprocal)
 locale=\langcode, % Set locale
 range-units=single, % Don't repeat units in number ranges
 list-units=single, % Don't repeat units in number lists
-detect-mode=true % Automatically detect whether it is in text or math mode
 ]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
+\DeclareSIUnit{\basepair}{bp} % Declare basepairs as a unit (important for DNA double strands)
+\DeclareSIUnit{\base}{b} % Declare bases as a unit (important for DNA single strands)
+\DeclareSIUnit{\Da}{Da} % Declare Dalton as unit (equals g/mol)
+\DeclareSIUnit{\M}{M} % Declare molarity as unit (equals mol/l)
+\DeclareSIUnit{\mM}{mM} % Declare molarity as unit (equals mmol/l)
+\DeclareSIUnit{\U}{U} % Declare units as unit (enzyme activity)
 
 
 %=========================%
@@ -98,11 +103,12 @@ detect-mode=true % Automatically detect whether it is in text or math mode
 \RequirePackage{caption} % Better captions, more customisable
 \RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
 \RequirePackage[
-    pdfpagelabels=true,
-    plainpages=false,
-    colorlinks=\colorlinks, % make links (as in TOC or references to figures) font red instead of drawing a red box around them. Colorlinks are also visible in print, boxes are not
-    bookmarks=true,
-    pdfview=FitB
+    pdfpagelabels=true, % Sets PDF page labels, so that PDF readers can detect different numbering styles (e.g. roman in \frontmatter)
+    plainpages=false, % Fixes errors caused by page numbering resets (as by \frontmatter, \mainmatter and \backmatter)
+    colorlinks=\colorlinks, % Make links (as in TOC or references to figures) font red instead of drawing a red box around them. Colorlinks are also visible in print, boxes are not
+    bookmarks=true,% Make booksmarks
+    pdfview=FitB, % When clicking a link, determines the view that will be shown. FitB fits the page bounding box to the window
+    final % Make links, no matter if draft mode or not
 ]{hyperref} % Required for the hyperlinks within the PDF
 \RequirePackage{cleveref} % Nice referencing with \cref{}
 
