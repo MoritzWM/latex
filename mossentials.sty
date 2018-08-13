@@ -139,4 +139,36 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 \RequirePackage{url}
 \urlstyle{same}
 
+%========%
+% Macros %
+%========%
+
+% Inputs a gel image and comments it. Width can be specified optionally.
+% This accesses the vectors and variables (defaults shown here):
+\newcommand{\lanetextrotation}{45}
+\newcommand{\lanetextanchor}{south west}
+\newcommand{\lanetextsize}{\small}
+\newcommand{\markertextsize}{\small}
+\newcommand{\lanetexts}{}
+\newcommand{\markersizes}{}
+\newcommand{\markerunit}{}
+\newcommand{\lanepositions}{}
+
+\newcommand{\gel}[2][]{%
+\begin{tikzpicture}
+    \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
+    \begin{scope}[x={(image.south east)},y={(image.north west)}]
+        % Draw lane names
+        \foreach \x/\t in \lanetexts {
+            \node[anchor=\lanetextanchor, rotate=\lanetextrotation] at (\x,1.0) {\lanetextsize\t};}
+        % Draw inter-lane lines
+        \foreach \x in \lanepositions {
+        \draw[dotted] (\x, 0) -- (\x, 1);}
+        % Draw marker
+        \foreach \y/\t in \markersizes {
+            \node[anchor=east] at (0, \y) {\markertextsize\SI{\t}{\markerunit}};
+        \draw[dotted] (0, \y) -- (1, \y);}
+    \end{scope}
+\end{tikzpicture}}
+
 \endinput
