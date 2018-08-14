@@ -152,6 +152,9 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 \newcommand{\markerunit}{} % Marker unit (typically bp or kDa), printed above marker sizes
 \newcommand{\markerleft}{1} % Side of gel where the marker is printed, either left or right
 \newcommand{\groups}{} % Groups in the format startlane/endlane/text
+\newcommand{\directgroups}{} % Groups in the format startlane/endlane/text which are placed directly above the image
+\newcommand{\vlines}{0} % Show vlines (for debuggingg or calibration)
+\newcommand{\hlines}{0} % Show hlines (for debugging or calibration)
 
 \newcommand{\gel}[2][]{%
 \begin{tikzpicture}
@@ -168,18 +171,23 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
         }
         % Draw marker unit
         "\ifthenelse{\markerleft=1}{
-            \node[anchor=south east] at (0.02, 0.99) {\textsize\si{\markerunit}};}{
-            \node[anchor=south west] at (0.98, 0.99) {\textsize\si{\markerunit}};}"
+            \node[anchor=south east, inner sep=0] at (0, 1) {\textsize\si{\markerunit}};}{
+            \node[anchor=south west, inner sep=0] at (1, 1) {\textsize\si{\markerunit}};}"
         % Draw marker
         \foreach \y/\t in \markertexts {
             "\ifthenelse{\markerleft=1}{
-                \node[anchor=east] at (0.02, \y) {\textsize\t--};}{
-                \node[anchor=west] at (0.98, \y) {\textsize--\t};}"
+                \node[anchor=east, inner sep=0] at (0, \y) {\textsize\t--};}{
+                \node[anchor=west, inner sep=0] at (1, \y) {\textsize--\t};}"
+            "\ifthenelse{\hlines=0}{}{
+                \draw[dotted] (0, \y) -- (1, \y);}"
         }
         % Draw groups
-        \def\y{1.08}
         \foreach \start/\end/\text in \groups {
             \draw (\start.north west) -- node[above]{\textsize\text} (\end.north east);
+        }
+        % Draw directgroups
+        \foreach \start/\end/\text in \directgroups {
+            \draw (\start.south west) -- node[above]{\textsize\text} (\end.south east);
         }
         % Renew default values
         \renewcommand{\lanetextrotation}{0}
@@ -189,6 +197,8 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
         \renewcommand{\markerunit}{}
         \renewcommand{\markerleft}{1}
         \renewcommand{\groups}{}
+        \renewcommand{\vlines}{0}
+        \renewcommand{\hlines}{0}
     \end{scope}
 \end{tikzpicture}}
 
