@@ -145,29 +145,37 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 
 % Inputs a gel image and comments it. Width can be specified optionally.
 % This accesses the vectors and variables (defaults shown here):
-\newcommand{\lanetextrotation}{45}
-\newcommand{\lanetextanchor}{south west}
-\newcommand{\lanetextsize}{\small}
-\newcommand{\markertextsize}{\small}
-\newcommand{\lanetexts}{}
-\newcommand{\markersizes}{}
-\newcommand{\markerunit}{}
-\newcommand{\lanepositions}{}
+\newcommand{\lanetextrotation}{0} % Degrees rotation each lane text should have
+\newcommand{\lanetextsize}{\scriptsize} % Font size of lane texts
+\newcommand{\markertextsize}{\scriptsize} % Font size of marker
+\newcommand{\lanetexts}{} % Text specifying the contents of each lane
+\newcommand{\markertexts}{} % Marker sizes
+\newcommand{\markerunit}{} % Marker unit (typically bp or kDa), printed above marker sizes
+\newcommand{\markerleft}{1} % Side of gel where the marker is printed, either left or right
 
 \newcommand{\gel}[2][]{%
 \begin{tikzpicture}
     \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
     \begin{scope}[x={(image.south east)},y={(image.north west)}]
+        % Determine lane text anchor, should be south for no rotation (default) and south west for rotated text (like 30, 45 or 60 degrees)
+        "\ifthenelse{\lanetextrotation=0}{
+            \def\lanetextanchor{south}}{
+            \def\lanetextanchor{south west}}"
         % Draw lane names
         \foreach \x/\t in \lanetexts {
-            \node[anchor=\lanetextanchor, rotate=\lanetextrotation] at (\x,1.0) {\lanetextsize\t};}
-        % Draw inter-lane lines
-        \foreach \x in \lanepositions {
-        \draw[dotted] (\x, 0) -- (\x, 1);}
+            \node[anchor=\lanetextanchor, rotate=\lanetextrotation] at (\x,0.99) {\lanetextsize\t};}
+        "\ifthenelse{\markerleft=1}{
+            \node[anchor=south east] at (0.02, 0.99) {\markertextsize\si{\markerunit}};}{
+            \node[anchor=south west] at (0.98, 0.99) {\markertextsize\si{\markerunit}};}"
         % Draw marker
-        \foreach \y/\t in \markersizes {
-            \node[anchor=east] at (0, \y) {\markertextsize\SI{\t}{\markerunit}};
-        \draw[dotted] (0, \y) -- (1, \y);}
+        \foreach \y/\t in \markertexts {
+            "\ifthenelse{\markerleft=1}{
+                \node[anchor=east] at (0.02, \y) {\markertextsize\t--};}{
+                \node[anchor=west] at (0.98, \y) {\markertextsize--\t};}"
+        }
+        % Renew default values
+        \renewcommand{\markerleft}{1}
+        \renewcommand{\lanetextrotation}{0}
     \end{scope}
 \end{tikzpicture}}
 
