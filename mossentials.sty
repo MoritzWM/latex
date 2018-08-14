@@ -151,7 +151,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 \newcommand{\markertexts}{} % Marker sizes
 \newcommand{\markerunit}{} % Marker unit (typically bp or kDa), printed above marker sizes
 \newcommand{\markerleft}{1} % Side of gel where the marker is printed, either left or right
-\newcommand{\groups}{} % Groups texts and positions in the format start/end/text
+\newcommand{\groups}{} % Groups in the format startlane/endlane/text
 
 \newcommand{\gel}[2][]{%
 \begin{tikzpicture}
@@ -162,8 +162,11 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
             \def\lanetextanchor{south}}{
             \def\lanetextanchor{south west}}"
         % Draw lane names
-        \foreach \x/\t in \lanetexts {
-            \node[anchor=\lanetextanchor, rotate=\lanetextrotation] at (\x,0.99) {\textsize\t};}
+        \def\laneindex{0}
+        \foreach[count=\laneindex] \x/\t in \lanetexts {
+            \node[anchor=\lanetextanchor, rotate=\lanetextrotation, minimum height =.5cm] (\laneindex) at (\x,0.99) {\textsize\t};
+        }
+        % Draw marker unit
         "\ifthenelse{\markerleft=1}{
             \node[anchor=south east] at (0.02, 0.99) {\textsize\si{\markerunit}};}{
             \node[anchor=south west] at (0.98, 0.99) {\textsize\si{\markerunit}};}"
@@ -176,7 +179,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
         % Draw groups
         \def\y{1.08}
         \foreach \start/\end/\text in \groups {
-            \draw (\start, \y) -- node[above] {\textsize\text} (\end, \y);
+            \draw (\start.north west) -- node[above]{\textsize\text} (\end.north east);
         }
         % Renew default values
         \renewcommand{\lanetextrotation}{0}
