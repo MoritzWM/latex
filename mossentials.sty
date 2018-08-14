@@ -146,12 +146,12 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 % Inputs a gel image and comments it. Width can be specified optionally.
 % This accesses the vectors and variables (defaults shown here):
 \newcommand{\lanetextrotation}{0} % Degrees rotation each lane text should have
-\newcommand{\lanetextsize}{\scriptsize} % Font size of lane texts
-\newcommand{\markertextsize}{\scriptsize} % Font size of marker
+\newcommand{\textsize}{\scriptsize} % Font size
 \newcommand{\lanetexts}{} % Text specifying the contents of each lane
 \newcommand{\markertexts}{} % Marker sizes
 \newcommand{\markerunit}{} % Marker unit (typically bp or kDa), printed above marker sizes
 \newcommand{\markerleft}{1} % Side of gel where the marker is printed, either left or right
+\newcommand{\groups}{} % Groups texts and positions in the format start/end/text
 
 \newcommand{\gel}[2][]{%
 \begin{tikzpicture}
@@ -163,19 +163,29 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
             \def\lanetextanchor{south west}}"
         % Draw lane names
         \foreach \x/\t in \lanetexts {
-            \node[anchor=\lanetextanchor, rotate=\lanetextrotation] at (\x,0.99) {\lanetextsize\t};}
+            \node[anchor=\lanetextanchor, rotate=\lanetextrotation] at (\x,0.99) {\textsize\t};}
         "\ifthenelse{\markerleft=1}{
-            \node[anchor=south east] at (0.02, 0.99) {\markertextsize\si{\markerunit}};}{
-            \node[anchor=south west] at (0.98, 0.99) {\markertextsize\si{\markerunit}};}"
+            \node[anchor=south east] at (0.02, 0.99) {\textsize\si{\markerunit}};}{
+            \node[anchor=south west] at (0.98, 0.99) {\textsize\si{\markerunit}};}"
         % Draw marker
         \foreach \y/\t in \markertexts {
             "\ifthenelse{\markerleft=1}{
-                \node[anchor=east] at (0.02, \y) {\markertextsize\t--};}{
-                \node[anchor=west] at (0.98, \y) {\markertextsize--\t};}"
+                \node[anchor=east] at (0.02, \y) {\textsize\t--};}{
+                \node[anchor=west] at (0.98, \y) {\textsize--\t};}"
+        }
+        % Draw groups
+        \def\y{1.08}
+        \foreach \start/\end/\text in \groups {
+            \draw (\start, \y) -- node[above] {\textsize\text} (\end, \y);
         }
         % Renew default values
-        \renewcommand{\markerleft}{1}
         \renewcommand{\lanetextrotation}{0}
+        \renewcommand{\textsize}{\scriptsize}
+        \renewcommand{\lanetexts}{}
+        \renewcommand{\markertexts}{}
+        \renewcommand{\markerunit}{}
+        \renewcommand{\markerleft}{1}
+        \renewcommand{\groups}{}
     \end{scope}
 \end{tikzpicture}}
 
