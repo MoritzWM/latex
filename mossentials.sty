@@ -47,20 +47,22 @@
 \RequirePackage[utf8]{inputenc}
 \RequirePackage[\lang]{babel} % Language specific small stuff (formatting and so on)
 \RequirePackage{\customfont} % Set the font
+\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
 \RequirePackage[
 backend=biber,
 hyperref=true,
 doi=true,
 url=false,
 eprint=false,
-style=numeric-comp % Haven't decided on a style yet
+style=numeric-comp, % Haven't decided on a style yet
+sorting=none, % Sorts in citation order, which is the only sorting method that makes sense if using numeric style
+autocite=superscript,
 ]{biblatex} % Biblatex
 
 
 %========================%
 % Miscellaneous packages %
 %========================%
-\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel
 \RequirePackage{color} % Colors
 \RequirePackage{colortbl} % Colors in table
 \RequirePackage[table,xcdraw]{xcolor} % Allow colored text
