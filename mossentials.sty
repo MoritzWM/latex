@@ -29,10 +29,10 @@
 % Font
 \newcommand{\customfont}{kpfonts}
 \DeclareOption{lmodern}{\renewcommand{\customfont}{lmodern}} % Latex default font, but improved
-\DeclareOption{gfsdidot}{\renewcommand{\customfont}{gfsdidot}} % Font GFS Didot, very nice, but does not work with mathtools and amsmath
 \DeclareOption{fourier}{\renewcommand{\customfont}{fourier}} % Adobe Utopia font
 \DeclareOption{garamond}{\renewcommand{\customfont}{ebgaramond-maths}} % Garamond
-\DeclareOption{libertine}{\renewcommand{\customfont}{libertine}} % Nice sans serif font
+\DeclareOption{gyre}{\renewcommand{\customfont}{tgpagella}} % Tex Gyre Pagella
+\DeclareOption{libertine}{\renewcommand{\customfont}{libertinus}} % Nice sans serif font
 
 % End of options
 \DeclareOption*{\PackageWarning{mossentials}{Unknown ‘\CurrentOption’}}
@@ -65,13 +65,14 @@ autocite=superscript,
 %========================%
 \RequirePackage{color} % Colors
 \RequirePackage{colortbl} % Colors in table
-\RequirePackage[table,xcdraw]{xcolor} % Allow colored text
+\RequirePackage[table]{xcolor} % Allow colored text
 \RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
 \RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
 \RequirePackage[final]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
 \RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry} % StyleGuide standards
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
 \RequirePackage[obeyDraft]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
+\RequirePackage{anyfontsize} % More flexibility in font sizes
 
 
 %=====================%
@@ -122,7 +123,10 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 % Biochemistry %
 %==============%
 \RequirePackage{seqsplit} % Split long single words in tables (such as DNA sequences) using \seqsplit{text}
-%\RequirePackage{pgfmolbio} % Super nice display of sequencing data and stuff like that. But I hardly use it, so it's disabled
+\RequirePackage{dnaseq} % Format DNA sequences nicely using \DNA! ATG!
+%\RequirePackage{pgfmolbio} % Super nice display of sequencing data, protein secondary structure etc.
+\RequirePackage{texshade} % Typeset nucleotide and amino acid alignments
+\RequirePackage{textopo} % Annotated membrane protein topology plots
 
 
 %============%
@@ -158,9 +162,9 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 \newcommand{\vlines}{0} % Show vlines (for debuggingg or calibration)
 \newcommand{\hlines}{0} % Show hlines (for debugging or calibration)
 
-\newcommand{\gel}[2][]{%
+\newcommand{\gel}[2]{%
 \begin{tikzpicture}
-    \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
+    \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
     \begin{scope}[x={(image.south east)},y={(image.north west)}]
         % Determine lane text anchor, should be south for no rotation (default) and south west for rotated text (like 30, 45 or 60 degrees)
         "\ifthenelse{\lanetextrotation=0}{
