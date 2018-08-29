@@ -182,8 +182,8 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
         % Draw marker
         \foreach \y/\t in \markertexts {
             "\ifthenelse{\markerleft=1}{
-                \node[anchor=east, inner sep=0] at (0, \y) {\textsize\t--};}{
-                \node[anchor=west, inner sep=0] at (1, \y) {\textsize--\t};}"
+                \draw (0, \y) -- +(-1mm, 0) node[anchor=east, inner sep=0] {\textsize\t};}{
+                \draw (1, \y) -- +(1mm, 0) node[anchor=west, inner sep=0] {\textsize\t};}"
             "\ifthenelse{\hlines=0}{}{
                 \draw[dotted] (0, \y) -- (1, \y);}"
         }
