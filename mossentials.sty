@@ -175,6 +175,14 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
             \draw (1, \y) -- +(1mm, 0) node[anchor=west, inner sep=0] {\textsize\t};
         }
     }
+    % Draw hlines
+    % #1: List
+    % #2: Unused
+    \pgfkeysdefnargs{/gel/marker/hlines}{2}{
+        \foreach \y/\t in ##1 {
+            \draw[dotted] (0, \y) -- (1, \y);
+        }
+    }
     % Main marker command:
     % #1: Key/value parameters
     % #2: Unit
@@ -182,6 +190,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
     \newcommand{\marker}[3][]{
         \pgfkeys{/gel/marker/.cd,
             side/.initial=left,
+            hlines/.default={{##3}}{},
             ##1,
             draw\pgfkeysvalueof{/gel/marker/side}={##2}{{##3}},
         }
@@ -222,15 +231,16 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
     % #2: Unused, same problem as in lanes code...
     \pgfkeysdefnargs{/gel/multilanes/draw}{2}{
         \foreach \start/\end/\text in ##1 {
-            \draw (\start.north west) -- node[above,
+            \draw (\start.\pgfkeysvalueof{/gel/multilanes/anchor} west) -- node[above,
             text height=1.5ex,
-            text depth=0.1ex]{\textsize\text} (\end.north east);
+            text depth=0.1ex]{\textsize\text} (\end.\pgfkeysvalueof{/gel/multilanes/anchor} east);
         }
     }
     % Main multilanes command
     \newcommand{\multilanes}[2][]{
         \pgfkeys{
             /gel/multilanes/.cd,
+            anchor/.initial=north,
             ##1,
             draw={{##2}}{},
         }
