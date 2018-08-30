@@ -240,10 +240,10 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
     \begin{tikzpicture}
         \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
-    }{
+    }% SWITCH FROM BEGIN TO END BLOCK
+    {\ignorespacesafterend
         \end{scope}
     \end{tikzpicture}
-    \ignorespacesafterend
     % END OF AFTER BLOCK
 }
 \endinput
