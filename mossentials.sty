@@ -145,10 +145,14 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 \RequirePackage{url}
 \urlstyle{same}
 
-\newenvironment{gel}{
+
+%%%%%%%%%%%%%%%%%%%
+% Gel environment %
+%%%%%%%%%%%%%%%%%%%
+\newenvironment{gel}[2][.5\textwidth]{\noindent\ignorespaces
     % START OF BEFORE BLOCK
     % Define new commands
-    \newcommand{\textsize}{\small}
+    \newcommand{\textsize}{\scriptsize}
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % ========== MARKER ========== %
@@ -192,8 +196,9 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
     \pgfkeysdefnargs{/gel/lanes/draw}{2}{
         \foreach[count = \laneindex] \x/\t in ##1 {
             \node[rotate=\pgfkeysvalueof{/gel/lanes/rotation},
-            anchor=south,
-            minimum height =.5cm] (\laneindex) at (\x,1) {\textsize\t};
+            anchor=\pgfkeysvalueof{/gel/lanes/anchor},
+            text height=1.5ex,
+            text depth=0.1ex] (\laneindex) at (\x,1) {\textsize\t};
         }
     }
     % main lanes command
@@ -203,6 +208,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
         \pgfkeys{
             /gel/lanes/.cd,
             rotation/.initial=0,
+            anchor/.initial=south,
             ##1,
             draw={{##2}}{},
         }
@@ -216,7 +222,9 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
     % #2: Unused, same problem as in lanes code...
     \pgfkeysdefnargs{/gel/multilanes/draw}{2}{
         \foreach \start/\end/\text in ##1 {
-            \draw (\start.south west) -- node[above]{\textsize\text} (\end.south east);
+            \draw (\start.north west) -- node[above,
+            text height=1.5ex,
+            text depth=0.1ex]{\textsize\text} (\end.north east);
         }
     }
     % Main multilanes command
@@ -230,11 +238,12 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 
     % Start the tikzpicture environment
     \begin{tikzpicture}
-        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=.5\textwidth]{gel.jpg}};
+        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
     }{
         \end{scope}
     \end{tikzpicture}
+    \ignorespacesafterend
     % END OF AFTER BLOCK
 }
 \endinput
