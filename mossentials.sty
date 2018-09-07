@@ -149,7 +149,12 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 %%%%%%%%%%%%%%%%%%%
 % Gel environment %
 %%%%%%%%%%%%%%%%%%%
-\newenvironment{gel}[2][.5\textwidth]{\noindent\ignorespaces
+% Arguments are:
+% #1: config=#3.tex; inputs a default file with commands that are executed. By
+% default #3.tex (image file ending (e.g. .jpg) must be omitted!)
+% #2: Width
+% #3: Image file (preferably omit file ending)
+\newenvironment{gel}[3][]{\noindent\ignorespaces
     % START OF BEFORE BLOCK
     % Define new commands
     \newcommand{\textsize}{\scriptsize}
@@ -248,8 +253,16 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 
     % Start the tikzpicture environment
     \begin{tikzpicture}
-        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
+      \pgfkeysdef{/gel/config}{
+        \input{##1}
+      }
+        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#2]{#3}};
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
+          \pgfkeys{ % Apply optional arguments
+            /gel/.cd,
+            config/.default=#3.tex,
+            #1,
+          }
     }% SWITCH FROM BEGIN TO END BLOCK
     {\ignorespacesafterend
         \end{scope}
