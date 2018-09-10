@@ -1,6 +1,6 @@
 % Package declaration
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesPackage{mossentials}[2017/07/09 Moritz's essentials package]
+\ProvidesPackage{mossentials}[2018/09/10 Moritz's essentials package]
 
 
 %=========%
@@ -73,6 +73,7 @@ autocite=superscript,
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
 \RequirePackage[obeyDraft]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
 \RequirePackage{anyfontsize} % More flexibility in font sizes
+\RequirePackage{xparse} % Better macro and environment declaration
 
 
 %=====================%
@@ -149,12 +150,13 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Setup command for gel and future environments %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\biochemsetup}[1]{
+\NewDocumentCommand{\biochemsetup}{>{\TrimSpaces}m}{
   \pgfkeys{
     /biochem/config/.cd,
     gel-base-path/.initial=./,
     gel-config-base-path/.initial=./,
     gel-textsize/.initial=\scriptsize,
+    #1,
   }
 }
 \biochemsetup{} % Call it once, so the key/value pairs are initialised
@@ -163,15 +165,12 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 % Gel environment %
 %%%%%%%%%%%%%%%%%%%
 % Arguments are:
-% #1: config=#3.tex; inputs a default file with commands that are executed. By
-% default #3.tex (image file ending (e.g. .jpg) must be omitted!)
-% #2: Width
-% #3: Image file (preferably omit file ending)
-\newenvironment{gel}[3][]{\noindent\ignorespaces
+% #1: Width (optional, default .5\textwidth)
+% #2: Image file (preferably omit file ending)
+\NewDocumentEnvironment{gel}{O{.5\textwidth} m}{\noindent\ignorespaces
     % START OF BEFORE BLOCK
   \pgfkeys{/biochem/config/gel-textsize/.get=\@textsize,
   }
-
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % ========== MARKER ========== %
@@ -267,11 +266,11 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 
     % Start the tikzpicture environment
     \begin{tikzpicture}
-        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#2]{#3}};
+        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
           % Input config file if it exists
-          \IfFileExists{\pgfkeysvalueof{/biochem/config/gel-config-base-path}#3.tex}{
-            \input{\pgfkeysvalueof{/biochem/config/gel-config-base-path}#3.tex}}{}
+          \IfFileExists{\pgfkeysvalueof{/biochem/config/gel-config-base-path}#2.tex}{
+            \input{\pgfkeysvalueof{/biochem/config/gel-config-base-path}#2.tex}}{}
     }% SWITCH FROM BEGIN TO END BLOCK
     {\ignorespacesafterend
         \end{scope}
