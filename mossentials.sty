@@ -171,8 +171,6 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 % #2: Image file (preferably omit file ending)
 \NewDocumentEnvironment{gel}{O{.5\textwidth} m}{\noindent\ignorespaces
     % START OF BEFORE BLOCK
-  \pgfkeys{/biochem/config/gel-textsize/.get=\@textsize,
-  }
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % ========== MARKER ========== %
@@ -181,18 +179,18 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
     % #1: Unit
     % #2: Marker list
     \pgfkeysdefnargs{/gel/marker/drawleft}{2}{
-        \node[anchor=south east, inner sep=0] at (0, 1) {\@textsize\si{##1}};
+        \node[anchor=south east, inner sep=0] at (0, 1) {\si{##1}};
         \foreach \y/\t in ##2 {
-            \draw (0, \y) -- +(-1mm, 0) node[anchor=east, inner sep=0] {\@textsize\t};
+            \draw (0, \y) -- +(-1mm, 0) node[anchor=east, inner sep=0] {\t};
         }
     }
     % Draw marker on right side
     % #1: Unit
     % #2: Marker list
     \pgfkeysdefnargs{/gel/marker/drawright}{2}{
-        \node[anchor=south west, inner sep=0] at (1, 1) {\@textsize\si{##1}};
+        \node[anchor=south west, inner sep=0] at (1, 1) {\si{##1}};
         \foreach \y/\t in ##2 {
-            \draw (1, \y) -- +(1mm, 0) node[anchor=west, inner sep=0] {\@textsize\t};
+            \draw (1, \y) -- +(1mm, 0) node[anchor=west, inner sep=0] {\t};
         }
     }
     % Draw hlines
@@ -227,7 +225,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
             \node[rotate=\pgfkeysvalueof{/gel/lanes/rotation},
             anchor=\pgfkeysvalueof{/gel/lanes/anchor},
             text height=1.5ex,
-            text depth=0.1ex] (\laneindex) at (\x,1) {\@textsize\t};
+            text depth=0.1ex] (\laneindex) at (\x,1) {\t};
         }
     }
     % main lanes command
@@ -253,7 +251,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
         \foreach \start/\end/\text in ##1 {
             \draw (\start.\pgfkeysvalueof{/gel/multilanes/anchor} west) -- node[above,
             text height=1.5ex,
-            text depth=0.1ex]{\@textsize\text} (\end.\pgfkeysvalueof{/gel/multilanes/anchor} east);
+            text depth=0.1ex]{\text} (\end.\pgfkeysvalueof{/gel/multilanes/anchor} east);
         }
     }
     % Main multilanes command
@@ -268,6 +266,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 
     % Start the tikzpicture environment
     \begin{tikzpicture}
+      \tikzstyle{every node}=[font=\pgfkeysvalueof{/biochem/config/gel-textsize}]
         \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
           % Input config file if it exists
