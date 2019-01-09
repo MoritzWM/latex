@@ -1,0 +1,152 @@
+% Package declaration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{biochemtools}[2018/11/06 Biochemistry tools]
+
+% Evaluate options
+% No options yet
+% End of options
+\DeclareOption*{\PackageWarning{mossentials}{Unknown ‘\CurrentOption’}}
+\ProcessOptions\relax
+
+% Load required packages
+\RequirePackage{tikz}
+\RequirePackage{xparse}
+
+% Load additional packages useful for biochemistry 
+\RequirePackage{seqsplit} % Split long single words in tables (such as DNA sequences) using \seqsplit{text}
+\RequirePackage{dnaseq} % Format DNA sequences nicely using \DNA! ATG!
+\RequirePackage{pgfmolbio} % Super nice display of sequencing data, protein secondary structure etc.
+\RequirePackage{texshade} % Typeset nucleotide and amino acid alignments
+\RequirePackage{textopo} % Annotated membrane protein topology plots
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Setup command for gel and future environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\biochemsetup}{>{\TrimSpaces}m}{
+  \pgfkeys{
+    /biochem/config/.cd,
+    gel-base-path/.initial=./,
+    gel-config-base-path/.initial=./gelcfgs/,
+    gel-textsize/.initial=\scriptsize,
+    #1,
+  }
+}
+\biochemsetup{} % Call it once, so the key/value pairs are initialised
+
+%%%%%%%%%%%%%%%%%%%
+% Gel environment %
+%%%%%%%%%%%%%%%%%%%
+% Arguments are:
+% #1: Width (optional, default .5\textwidth)
+% #2: Image file (preferably omit file ending)
+\NewDocumentEnvironment{gel}{O{.5\textwidth} m}{\noindent\ignorespaces
+    % START OF BEFORE BLOCK
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % ========== MARKER ========== %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Draw marker on left side
+    % #1: Unit
+    % #2: Marker list
+    \pgfkeysdefnargs{/gel/marker/drawleft}{2}{
+        \node[anchor=south east, inner sep=0] at (0, 1) {\si{##1}};
+        \foreach \y/\t in ##2 {
+            \draw (0, \y) -- +(-1mm, 0) node[anchor=east, inner sep=0] {\t};
+        }
+    }
+    % Draw marker on right side
+    % #1: Unit
+    % #2: Marker list
+    \pgfkeysdefnargs{/gel/marker/drawright}{2}{
+        \node[anchor=south west, inner sep=0] at (1, 1) {\si{##1}};
+        \foreach \y/\t in ##2 {
+            \draw (1, \y) -- +(1mm, 0) node[anchor=west, inner sep=0] {\t};
+        }
+    }
+    % Draw hlines
+    % #1: List
+    % #2: Unused
+    \pgfkeysdefnargs{/gel/marker/hlines}{2}{
+        \foreach \y/\t in ##1 {
+            \draw[dotted] (0, \y) -- (1, \y);
+        }
+    }
+    % Main marker command:
+    % #1: Key/value parameters
+    % #2: Unit
+    % #3: List
+    \newcommand{\marker}[3][]{
+        \pgfkeys{/gel/marker/.cd,
+            side/.initial=left,
+            hlines/.default={{##3}}{},
+            ##1,
+            draw\pgfkeysvalueof{/gel/marker/side}={##2}{{##3}},
+        }
+    }
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % ========== LANES ========== %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Draw lane texts. Needs two arguments for some reason, otherwise it will only print a 0 at (0,1). Second argument is empty
+    % #1: List
+    % #2: Unused, but for some reason needs to exist...
+    \pgfkeysdefnargs{/gel/lanes/draw}{2}{
+        \foreach[count = \laneindex] \x/\t in ##1 {
+            \node[rotate=\pgfkeysvalueof{/gel/lanes/rotation},
+            anchor=\pgfkeysvalueof{/gel/lanes/anchor},
+            text height=1.5ex,
+            text depth=0.1ex] (\laneindex) at (\x,1) {\t};
+        }
+    }
+    % main lanes command
+    % #1: Key/value parameters
+    % #2: List
+    \newcommand{\lanes}[2][]{
+        \pgfkeys{
+            /gel/lanes/.cd,
+            rotation/.initial=0,
+            anchor/.initial=south,
+            ##1,
+            draw={{##2}}{},
+        }
+    }
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % ========== MULTILANES ========== %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Draw multilanes
+    % #1: List, format: laneindex1/laneindex2/text
+    % #2: Unused, same problem as in lanes code...
+    \pgfkeysdefnargs{/gel/multilanes/draw}{2}{
+        \foreach \start/\end/\text in ##1 {
+            \draw (\start.\pgfkeysvalueof{/gel/multilanes/anchor} west) -- node[above,
+            text height=1.5ex,
+            text depth=0.1ex]{\text} (\end.\pgfkeysvalueof{/gel/multilanes/anchor} east);
+        }
+    }
+    % Main multilanes command
+    \newcommand{\multilanes}[2][]{
+        \pgfkeys{
+            /gel/multilanes/.cd,
+            anchor/.initial=north,
+            ##1,
+            draw={{##2}}{},
+        }
+    }
+
+    % Start the tikzpicture environment
+    \begin{tikzpicture}
+      \tikzstyle{every node}=[font=\pgfkeysvalueof{/biochem/config/gel-textsize}]
+        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[width=#1]{#2}};
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+          % Input config file if it exists
+          \IfFileExists{\pgfkeysvalueof{/biochem/config/gel-config-base-path}#2.tex}{
+            \input{\pgfkeysvalueof{/biochem/config/gel-config-base-path}#2.tex}}{}
+    }% SWITCH FROM BEGIN TO END BLOCK
+    {\ignorespacesafterend
+        \end{scope}
+    \end{tikzpicture}
+    % END OF AFTER BLOCK
+}
+\endinput
