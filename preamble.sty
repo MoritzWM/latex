@@ -93,9 +93,9 @@ autocite=superscript,
 \RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
 \RequirePackage[final]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
-\RequirePackage[obeyDraft]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
 \RequirePackage{titlecaps} % Automatic title capitalization with \titlecap{}
 \setspace{} % Line spacing if needed (for thesis and so on)
+\RequirePackage{enumitem} % More control over lists
 
 %=====================%
 % Chemistry and maths %
@@ -151,6 +151,9 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
   \captionsetup[figure]{labelformat=empty}
   \captionsetup[table]{labelformat=empty}
   \captionsetup[subtable]{labelformat=empty}
+  \usepackage{pgfpages} % For typesetting notes on second screen with \setbeameroption{show notes on second screen}
+  \setlist[description]{style=nextline} % Nicer descriptions
+  \setlist[itemize]{label=\textbullet} % Add bullets to lists
 }{%other documentclass
   \RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry} % StyleGuide standards
   \RequirePackage[ % Hyperref
@@ -161,6 +164,7 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
   final % Make links, no matter if draft mode or not
   ]{hyperref} % Required for the hyperlinks within the PDF
   \RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
+  \RequirePackage[obeyDraft]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
 }
 \makeatother
 
