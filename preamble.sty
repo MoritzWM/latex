@@ -63,10 +63,13 @@
 \ExecuteOptions{nocolorlinks, english, kpfonts} % Default options
 \ProcessOptions\relax
 
-
 % Fix too many alphabets error
 \newcommand\hmmax{0}
 \newcommand\bmmax{0}
+
+% Add document information
+\date{\today}
+\author{Moritz Wachsmuth-Melm}
 
 %====================%
 % Important packages %
@@ -169,7 +172,9 @@ forbid-literal-units=true, % Only allow predefined units to enforce consistency
 \makeatother
 
 
-% Unicode characters (mostly the greek ones)
+%============================================%
+% Unicode characters (mostly the greek ones) %
+%============================================%
 \DeclareUnicodeCharacter{0391}{\chemAlpha} % Α Greek Capital Letter Alpha
 \DeclareUnicodeCharacter{0392}{\chemBeta} % Β Greek Capital Letter Beta
 \DeclareUnicodeCharacter{0393}{\chemGamma} % Γ Greek Capital Letter Gamma
