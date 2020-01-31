@@ -1,0 +1,28 @@
+% Package declaration
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{documentation}[2020/01/20 The documentation package]
+
+% Documentation at beginning or end of document
+\newcommand{\documentation}{}
+\DeclareOption{begin}{\renewcommand{\documentation}{\AtBeginDocument}}
+\DeclareOption{end}{\renewcommand{\documentation}{\AtEndDocument}}
+
+\newif\if@draft
+\newif\if@option@draft
+\newif\if@option@final
+\DeclareOption{draft}{%
+  \@drafttrue
+  \@option@drafttrue
+}
+
+\DeclareOption*{\PackageWarning{documentation}{Unknown \CurrentOption}}
+\ExecuteOptions{end}
+\ProcessOptions*\relax
+
+
+\if@draft
+	\documentation{Blablabla}
+\else
+\fi
+
+\endinput
