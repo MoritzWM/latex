@@ -5,6 +5,12 @@
 % Warns of deprecated LaTeX constructs
 \RequirePackage[l2tabu, orthodox]{nag}
 
+ % ACS StyleGuide margins
+\newcommand{\acsgeometry}{}
+\DeclareOption{geometry}{
+	\renewcommand{\acsgeometry}{\RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry}}
+}
+
 % Based on scrbook class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
 \ProcessOptions\relax
@@ -66,10 +72,7 @@ final, % Make links, no matter if draft mode or not
 % \RequirePackage{ebgaramond-maths}
 % \RequirePackage{lmodern}
 \RequirePackage{kpfonts}
-% \RequirePackage[
-% left=1.50cm, right=1.50cm,
-% top=3.00cm, bottom=3.00cm
-% ]{geometry} % ACS StyleGuide
+\acsgeometry{}
 
 %=========%
 % SIUnitx %
