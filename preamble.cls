@@ -5,11 +5,18 @@
 % Warns of deprecated LaTeX constructs
 \RequirePackage[l2tabu, orthodox]{nag}
 
- % ACS StyleGuide margins
+% ACS StyleGuide margins (default: disabled)
 \newcommand{\acsgeometry}{}
 \DeclareOption{geometry}{
 	\renewcommand{\acsgeometry}{\RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry}}
 }
+
+% Colorlinks yes or no (default no)
+\newcommand{\colorlinksenabled}{false}
+\DeclareOption{colorlinks}{
+	\renewcommand{\colorlinksenabled}{true}
+}
+
 
 % Based on scrbook class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
@@ -53,7 +60,7 @@ hyperref=true
 \RequirePackage[
 pdfpagelabels=true, % Sets PDF page labels, so that PDF readers can detect different numbering styles (e.g. roman in \frontmatter)
 plainpages=false, % Fixes errors caused by page numbering resets (as by \frontmatter, \mainmatter and \backmatter)
-colorlinks=false, % Make links (as in TOC or references to figures) font red instead of drawing a red box around them. Colorlinks are also visible in print, boxes are not
+colorlinks=\colorlinksenabled, % Make links (as in TOC or references to figures) font red instead of drawing a red box around them. Colorlinks are also visible in print, boxes are not
 bookmarks=true, % Make bookmarks
 final, % Make links, no matter if draft mode or not
 ]{hyperref} 
