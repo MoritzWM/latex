@@ -26,9 +26,8 @@
 % Packages that just should be there in any preamble %
 %====================================================%
 \RequirePackage[T1]{fontenc} 
-% \RequirePackage[utf8]{inputenc}
 \RequirePackage[ngerman,english]{babel}
-% \RequirePackage[outputdir=output]{minted} % Has to be loaded before csquotes
+\RequirePackage[outputdir=output]{minted} % Code syntax highlighting, has to be loaded before csquotes
 \RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
 \RequirePackage[final]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
 \RequirePackage{graphicx}
@@ -74,7 +73,8 @@ use-xspace=true, % Correct space after unit
 % Floats, figures, images %
 %=========================%
 \RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
-\tikzset{nosep/.style={inner sep=0, outer sep=0}}
+\tikzset{tight/.style={inner sep=0, outer sep=0},
+	 tile/.style={tight,draw=none,fill=none,align=center}}
 \usepackage{multimedia}
 
 %=============%
@@ -97,8 +97,23 @@ use-xspace=true, % Correct space after unit
 \newcommand{\figrefs}[1]{figs.~\ref{#1}}
 \newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
 
-% Custom environment: tikzonimage
-\newenvironment{tikzonimage}[2][width=\textwidth]{
+%==================================%
+% Custom environments and commands %
+%==================================%
+\def\scalebarwidth{2mm}
+\newcommand{\scalebar}[4][white]{
+    \draw[line width=\scalebarwidth,draw=#1]
+        ($(#2.south east) + (-\scalebarwidth,\scalebarwidth*1.5)$) -- +(-#3, 0pt)
+        node[midway,above=0pt,font=\small\bfseries,text=#1,inner sep=0,outer sep=\scalebarwidth/2+0.1pt] {#4}
+}
+
+\newenvironment{tikzonnode}[1]{%
+    \begin{scope}[shift={(#1.south west)},x={(#1.south east)},y={(#1.north west)}]%
+        }{%
+    \end{scope}%
+}
+\newenvironment{tikzongraphics}[2][width=\textwidth]{
+    \newcommand{\helplines}{\draw[help lines] (0, 0) grid[xstep=0.1, ystep=0.1] (1, 1)}
     \begin{tikzpicture}
         \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
