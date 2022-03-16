@@ -1,22 +1,23 @@
 % Class declaration
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{preamble}[2020/06/25 Moritz's preamble class]
+\ProvidesClass{preamble}[2022/03/16 Moritz's preamble class]
 
 % Warns of deprecated LaTeX constructs
 \RequirePackage[l2tabu, orthodox]{nag}
 
+%===============%
+% Class options %
+%===============%
 % ACS StyleGuide margins (default: disabled)
 \newcommand{\acsgeometry}{}
 \DeclareOption{geometry}{
 	\renewcommand{\acsgeometry}{\RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry}}
 }
-
 % Colorlinks yes or no (default no)
 \newcommand{\colorlinksenabled}{false}
 \DeclareOption{colorlinks}{
 	\renewcommand{\colorlinksenabled}{true}
 }
-
 
 % Based on scrbook class
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrbook}}
@@ -38,14 +39,23 @@ toc=index,
 \date{\today}
 \author{Moritz Wachsmuth-Melm}
 
+%===============================%
+% Extra settings for draft mode %
+%===============================%
+\RequirePackage{ifdraft}
+\ifdraft{
+	\RequirePackage{silence}
+	\WarningFilter{latex}{Marginpar on page} % Todonotes cause this warning
+}{}
+
 %====================================================%
 %================== Basic packages ==================%
 % Packages that just should be there in any preamble %
 %====================================================%
 \RequirePackage[T1]{fontenc} 
-\RequirePackage[utf8]{inputenc}
+% \RequirePackage[utf8]{inputenc}
 \RequirePackage[ngerman,english]{babel}
-\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
+\RequirePackage[autostyle]{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
 \RequirePackage[
 backend=biber,
 doi=true,
@@ -64,12 +74,13 @@ colorlinks=\colorlinksenabled, % Make links (as in TOC or references to figures)
 bookmarks=true, % Make bookmarks
 final, % Make links, no matter if draft mode or not
 ]{hyperref} 
+\RequirePackage{graphicx}
 
 
 %========================%
 % Styling packages %
 %========================%
-\RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
+% \RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
 \DeclarePrintbibliographyDefaults{title=References}
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
 \RequirePackage[onehalfspacing]{setspace}
@@ -101,9 +112,11 @@ use-xspace=true, % Correct space after unit
 \DeclareSIUnit{\mmolar}{\milli\molar} % Short form
 \DeclareSIUnit{\umolar}{\micro\molar} % Short form
 \DeclareSIUnit{\enzymeunit}{U} % Enzyme activity units
+\DeclareSIUnit{\electron}{e\textsuperscript{-}} % Electrons
 \DeclareSIUnit{\xg}{xg} % Centrifugal force (g)
-\DeclareSIUnit{\rpm}{rpm} % Rounds per minute
-\DeclareSIUnit{\hpi}{hpi} % Hours past infection
+\DeclareSIUnit{\rpm}{rpm} % Rounds per minute (centrifuges)
+\DeclareSIUnit{\hpi}{hpi} % Hours past infection (virology)
+\DeclareSIUnit{\PFU}{\textsc{PFU}} % Plaque forming units (virology)
 \DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
 
 
@@ -112,29 +125,24 @@ use-xspace=true, % Correct space after unit
 %=====================%
 \RequirePackage{chemformula} % Stuff like \ch{MgCl2}
 \RequirePackage{chemmacros} % Extension of chemformula, most notably contains \iupac{}, very useful for long IUPAC names containing heteroatoms, stereochemistry, greek letters and stuff. Also allows line breaking
-\RequirePackage{mathtools} % Math stuff
-\RequirePackage{amsfonts} % Math stuff (continued)
-\RequirePackage{amssymb} % Math stuff (continued)
-% \RequirePackage{chemfig} % Structural formulas drawn with tikz. Not so easy to use, but looks very nice. Still looking for an easier alternative
 
 
 %=========================%
 % Floats, figures, images %
 %=========================%
-\RequirePackage[section]{placeins} % Floats can not be printed behind the next section.
-\RequirePackage{caption} % Better captions, more customisable
-\RequirePackage{subcaption} % Subfigures, subcaptions
+% \RequirePackage[section]{placeins} % Floats can not be printed behind the next section.
 \RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
-\RequirePackage{xcolor} % Allow colored text
+\tikzset{nosep/.style={inner sep=0, outer sep=0}}
+\RequirePackage{subcaption} % Subfigures, subcaptions
+\captionsetup{subrefformat=parens}
 
 %=============%
 % Table stuff %
 %=============%
-\RequirePackage{multirow} % \multicolumn{num_of_columns}{X}{Content} and \multirow{num_of_rows}{X}{Content}
-\RequirePackage{multirow,bigdelim} % Braces spanning multiple rows
-\RequirePackage{xltabular} % A combination of longtable and tabularx. Useful for multi-page tables
-\RequirePackage{csvsimple} % Read csv files as tables
 \RequirePackage{booktabs} % \toprule, \midrule, \bottomrule, nicer tables (must have!)
+\RequirePackage{multirow} % \multicolumn{num_of_columns}{X}{Content} and \multirow{num_of_rows}{X}{Content}
+\RequirePackage{xltabular} % A combination of longtable and tabularx. Useful for multi-page tables
+
 
 %===============%
 % Miscellaneous %
@@ -147,67 +155,24 @@ use-xspace=true, % Correct space after unit
 %=======================%
 % I could use a package like cleveref,
 % but they always throw errors for some reason
-\newcommand{\tabref}[1]{tab.~\ref{#1}}
-\newcommand{\Tabref}[1]{Tab.~\ref{#1}}
-\newcommand{\tabrefs}[1]{tabs.~\ref{#1}}
-\newcommand{\Tabrefs}[1]{Tabs.~\ref{#1}}
+\newcommand{\tabref}[1]{table~\ref{#1}}
+\newcommand{\Tabref}[1]{Table~\ref{#1}}
+\newcommand{\tabrefs}[1]{tables~\ref{#1}}
+\newcommand{\Tabrefs}[1]{Tables~\ref{#1}}
 \newcommand{\figref}[1]{fig.~\ref{#1}}
 \newcommand{\Figref}[1]{Fig.~\ref{#1}}
 \newcommand{\figrefs}[1]{figs.~\ref{#1}}
 \newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
 
-%============================================%
-% Unicode characters (mostly the greek ones) %
-%============================================%
-\DeclareUnicodeCharacter{0391}{\chemAlpha} % Α Greek Capital Letter Alpha
-\DeclareUnicodeCharacter{0392}{\chemBeta} % Β Greek Capital Letter Beta
-\DeclareUnicodeCharacter{0393}{\chemGamma} % Γ Greek Capital Letter Gamma
-\DeclareUnicodeCharacter{0394}{\chemDelta} % Δ Greek Capital Letter Delta
-\DeclareUnicodeCharacter{0395}{\chemEpsilon} % Ε Greek Capital Letter Epsilon
-\DeclareUnicodeCharacter{0396}{\chemZeta} % Ζ Greek Capital Letter Zeta
-\DeclareUnicodeCharacter{0397}{\chemEta} % Η Greek Capital Letter Eta
-\DeclareUnicodeCharacter{0398}{\chemTheta} % Θ Greek Capital Letter Theta
-\DeclareUnicodeCharacter{0399}{\chemIota} % Ι Greek Capital Letter Iota
-\DeclareUnicodeCharacter{039A}{\chemKappa} % Κ Greek Capital Letter Kappa
-\DeclareUnicodeCharacter{039B}{\chemLambda} % Λ Greek Capital Letter Lambda
-\DeclareUnicodeCharacter{039C}{\chemMu} % Μ Greek Capital Letter Mu
-\DeclareUnicodeCharacter{039D}{\chemNu} % Ν Greek Capital Letter Nu
-\DeclareUnicodeCharacter{039E}{\chemXi} % Ξ Greek Capital Letter Xi
-\DeclareUnicodeCharacter{039F}{\chemOmicron} % Ο Greek Capital Letter Omicron
-\DeclareUnicodeCharacter{03A0}{\chemPi} % Π Greek Capital Letter Pi
-\DeclareUnicodeCharacter{03A1}{\chemRho} % Ρ Greek Capital Letter Rho
-\DeclareUnicodeCharacter{03A3}{\chemSigma} % Σ Greek Capital Letter Sigma
-\DeclareUnicodeCharacter{03A4}{\chemTau} % Τ Greek Capital Letter Tau
-\DeclareUnicodeCharacter{03A5}{\chemUpsilon} % Υ Greek Capital Letter Upsilon
-\DeclareUnicodeCharacter{03A6}{\chemPhi} % Φ Greek Capital Letter Phi
-\DeclareUnicodeCharacter{03A7}{\chemChi} % Χ Greek Capital Letter Chi
-\DeclareUnicodeCharacter{03A8}{\chemPsi} % Ψ Greek Capital Letter Psi
-\DeclareUnicodeCharacter{03A9}{\chemOmega} % Ω Greek Capital Letters Omega
-\DeclareUnicodeCharacter{03B1}{\chemalpha} % α Greek Small Letter Alpha
-\DeclareUnicodeCharacter{03B2}{\chembeta} % β Greek Small Letter Beta
-\DeclareUnicodeCharacter{03B3}{\chemgamma} % γ Greek Small Letter Gamma
-\DeclareUnicodeCharacter{03B4}{\chemdelta} % δ Greek Small Letter Delta
-\DeclareUnicodeCharacter{03B5}{\chemepsilon} % ε Greek Small Letter Epsilon
-\DeclareUnicodeCharacter{03B6}{\chemzeta} % ζ Greek Small Letter Zeta
-\DeclareUnicodeCharacter{03B7}{\chemeta} % η Greek Small Letter Eta
-\DeclareUnicodeCharacter{03B8}{\chemtheta} % θ Greek Small Letter Theta
-\DeclareUnicodeCharacter{03B9}{\chemiota} % ι Greek Small Letter Iota
-\DeclareUnicodeCharacter{03BA}{\chemkappa} % κ Greek Small Letter Kappa
-\DeclareUnicodeCharacter{03BB}{\chemlambda} % λ Greek Small Letter Lambda
-\DeclareUnicodeCharacter{03BC}{\chemmu} % μ Greek Small Letter Mu
-\DeclareUnicodeCharacter{03BD}{\chemnu} % ν Greek Small Letter Nu
-\DeclareUnicodeCharacter{03BE}{\chemxi} % ξ Greek Small Letter Xi
-\DeclareUnicodeCharacter{03BF}{\chemomicron} % ο Greek Small Letter Omicron
-\DeclareUnicodeCharacter{03C0}{\chempi} % π Greek Small Letter Pi
-\DeclareUnicodeCharacter{03C1}{\chemrho} % ρ Greek Small Letter Rho
-\DeclareUnicodeCharacter{03C3}{\chemsigma} % σ Greek Small Letter Sigma
-\DeclareUnicodeCharacter{03C4}{\chemtau} % τ Greek Small Letter Tau
-\DeclareUnicodeCharacter{03C5}{\chemupsilon} % υ Greek Small Letter Upsilon
-\DeclareUnicodeCharacter{03C6}{\chemphi} % φ Greek Small Letter Phi
-\DeclareUnicodeCharacter{03C7}{\chemchi} % χ Greek Small Letter Chi
-\DeclareUnicodeCharacter{03C8}{\chempsi} % ψ Greek Small Letter Psi
-\DeclareUnicodeCharacter{03C9}{\chemomega} % ω Greek Small Letter Omega
-\endinput
+% Custom environment: tikzonimage
+\newenvironment{tikzonimage}[2][width=\textwidth]{
+    \begin{tikzpicture}
+        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+        }{
+        \end{scope}
+    \end{tikzpicture}
+}
 
 % ============================================================================%
 % ================= Fix booktabs - xltabular incompatibility =================%
@@ -229,3 +194,5 @@ use-xspace=true, % Correct space after unit
   \ifnum\@lastruleclass=\@ne\vskip\doublerulesep\fi\fi\fi
   \@BTswitch}
 \makeatother
+
+\endinput
