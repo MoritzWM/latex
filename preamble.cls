@@ -102,7 +102,6 @@ range-units=single, % Don't repeat units in number ranges
 list-units=single, % Don't repeat units in number lists
 detect-all, % Apply same font settings to the number/unit as the surrounding text
 forbid-literal-units=true, % Only allow predefined units to enforce consistency
-abbreviations=true, % Load abbreviations (\mg, \mmol, \ml etc.)
 use-xspace=true, % Correct space after unit
 ]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
 % Declare custom units (mainly chemistry and biology related)
