@@ -1,6 +1,6 @@
 % Class declaration
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{preamble-beamer}[2022/03/16 Moritz's preamble class (beamer)]
+\ProvidesClass{preamble_beamer}[2022/03/16 Moritz's preamble class (beamer)]
 
 % Warns of deprecated LaTeX constructs
 \RequirePackage[l2tabu, orthodox]{nag}
@@ -27,9 +27,8 @@
 %====================================================%
 \RequirePackage[T1]{fontenc} 
 \RequirePackage[ngerman,english]{babel}
-\RequirePackage[outputdir=output]{minted} % Code syntax highlighting, has to be loaded before csquotes
+\RequirePackage[final, nopatch=footnote]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
 \RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
-\RequirePackage[final]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
 \RequirePackage{graphicx}
 
 
@@ -44,7 +43,6 @@ range-units=single, % Don't repeat units in number ranges
 list-units=single, % Don't repeat units in number lists
 detect-all, % Apply same font settings to the number/unit as the surrounding text
 forbid-literal-units=true, % Only allow predefined units to enforce consistency
-abbreviations=true, % Load abbreviations (\mg, \mmol, \ml etc.)
 use-xspace=true, % Correct space after unit
 ]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
 % Declare custom units (mainly chemistry and biology related)
@@ -59,6 +57,8 @@ use-xspace=true, % Correct space after unit
 \DeclareSIUnit{\rpm}{rpm} % Rounds per minute (centrifugation)
 \DeclareSIUnit{\hpi}{hpi} % Hours past infection (virology)
 \DeclareSIUnit{\PFU}{\textsc{PFU}} % Plaque forming units (virology)
+\DeclareSIUnit{\Da}{Da} % Plaque forming units (virology)
+\DeclareSIUnit{\kDa}{kDa} % Plaque forming units (virology)
 \DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
 
 
@@ -66,7 +66,6 @@ use-xspace=true, % Correct space after unit
 % Chemistry %
 %===========%
 \RequirePackage{chemformula} % Stuff like \ch{MgCl2}
-\RequirePackage{chemmacros} % Extension of chemformula, most notably contains \iupac{}, very useful for long IUPAC names containing heteroatoms, stereochemistry, greek letters and stuff. Also allows line breaking
 
 
 %=========================%
@@ -121,5 +120,16 @@ use-xspace=true, % Correct space after unit
         \end{scope}
     \end{tikzpicture}
 }
+
+\newcommand\svg[2][0pt]{
+    \ifdim#1>0pt
+    \def\svgwidth{#1}
+    \fi
+    \input{#2}
+    \undef\svgwidth
+}
+
+
+\usetheme[numbering=none]{metropolis} % , background=dark
 
 \endinput
