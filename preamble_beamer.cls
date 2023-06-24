@@ -8,128 +8,28 @@
 %===============%
 % Class options %
 %===============%
-% Based on beamer class
+\newcommand{\background}{light}
+\DeclareOption{dark}{
+	\renewcommand{\background}{dark}
+}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{beamer}}
 \ProcessOptions\relax
-\LoadClass{beamer}
-
-% Fix too many alphabets error
-\newcommand\hmmax{0}
-\newcommand\bmmax{0}
-
-% Add document information
-\date{\today}
-\author{Moritz Wachsmuth-Melm}
-
-%====================================================%
-%================== Basic packages ==================%
-% Packages that just should be there in any preamble %
-%====================================================%
-\RequirePackage[T1]{fontenc} 
-\RequirePackage[ngerman,english]{babel}
-\RequirePackage[final, nopatch=footnote]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
-\RequirePackage{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
-\RequirePackage{graphicx}
-
-
-
-%=========%
-% SIUnitx %
-% =========%
-\RequirePackage[
-per-mode=reciprocal-positive-first, % Format of units (fraction or reciprocal)
-locale=US, % Set locale
-range-units=single, % Don't repeat units in number ranges
-list-units=single, % Don't repeat units in number lists
-detect-all, % Apply same font settings to the number/unit as the surrounding text
-forbid-literal-units=true, % Only allow predefined units to enforce consistency
-use-xspace=true, % Correct space after unit
-]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
-% Declare custom units (mainly chemistry and biology related)
-\DeclareSIUnit{\basepair}{bp} % Basepairs
-\DeclareSIUnit{\base}{b} % Bases
-\DeclareSIUnit{\molar}{\textsc{m}} % Molarity (mol/l)
-\DeclareSIUnit{\mmolar}{\milli\molar} % Short form
-\DeclareSIUnit{\umolar}{\micro\molar} % Short form
-\DeclareSIUnit{\enzymeunit}{U} % Enzyme activity units
-\DeclareSIUnit{\electron}{e\textsuperscript{-}} % Electrons
-\DeclareSIUnit{\xg}{xg} % Centrifugal force (g)
-\DeclareSIUnit{\rpm}{rpm} % Rounds per minute (centrifugation)
-\DeclareSIUnit{\hpi}{hpi} % Hours past infection (virology)
-\DeclareSIUnit{\PFU}{\textsc{PFU}} % Plaque forming units (virology)
-\DeclareSIUnit{\Da}{Da} % Plaque forming units (virology)
-\DeclareSIUnit{\kDa}{kDa} % Plaque forming units (virology)
-\DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
-
-
-%===========%
-% Chemistry %
-%===========%
-\RequirePackage{chemformula} % Stuff like \ch{MgCl2}
-
-
-%=========================%
-% Floats, figures, images %
-%=========================%
-\RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
-\tikzset{tight/.style={inner sep=0, outer sep=0},
-	 tile/.style={tight,draw=none,fill=none,align=center}}
-\usepackage{multimedia}
-
-%=============%
-% Table stuff %
-%=============%
-\RequirePackage{booktabs} % \toprule, \midrule, \bottomrule, nicer tables (must have!)
-\RequirePackage{multirow} % \multicolumn{num_of_columns}{X}{Content} and \multirow{num_of_rows}{X}{Content}
-
-%=======================%
-% Consistent references %
-%=======================%
-% I could use a package like cleveref,
-% but they always throw errors for some reason
-\newcommand{\tabref}[1]{tab.~\ref{#1}}
-\newcommand{\Tabref}[1]{Tab.~\ref{#1}}
-\newcommand{\tabrefs}[1]{tabs.~\ref{#1}}
-\newcommand{\Tabrefs}[1]{Tabs.~\ref{#1}}
-\newcommand{\figref}[1]{fig.~\ref{#1}}
-\newcommand{\Figref}[1]{Fig.~\ref{#1}}
-\newcommand{\figrefs}[1]{figs.~\ref{#1}}
-\newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
+\LoadClass[aspectratio=169]{beamer}
 
 %==================================%
 % Custom environments and commands %
 %==================================%
-\def\scalebarwidth{2mm}
-\newcommand{\scalebar}[4][white]{
-    \draw[line width=\scalebarwidth,draw=#1]
-        ($(#2.south east) + (-\scalebarwidth,\scalebarwidth*1.5)$) -- +(-#3, 0pt)
-        node[midway,above=0pt,font=\small\bfseries,text=#1,inner sep=0,outer sep=\scalebarwidth/2+0.1pt] {#4}
+% Movie inclusion with media9
+\newcommand{\movie}[2]{%
+    \includemedia[%
+        addresource=#2,%
+        activate=pageopen,%
+        passcontext,%
+        flashvars={%
+            source=#2%
+            &loop=true%
+        }]{#1}{VPlayer.swf}%
 }
-
-\newenvironment{tikzonnode}[1]{%
-    \begin{scope}[shift={(#1.south west)},x={(#1.south east)},y={(#1.north west)}]%
-        }{%
-    \end{scope}%
-}
-\newenvironment{tikzongraphics}[2][width=\textwidth]{
-    \newcommand{\helplines}{\draw[help lines] (0, 0) grid[xstep=0.1, ystep=0.1] (1, 1)}
-    \begin{tikzpicture}
-        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
-        \begin{scope}[x={(image.south east)},y={(image.north west)}]
-        }{
-        \end{scope}
-    \end{tikzpicture}
-}
-
-\newcommand\svg[2][0pt]{
-    \ifdim#1>0pt
-    \def\svgwidth{#1}
-    \fi
-    \input{#2}
-    \undef\svgwidth
-}
-
-
-\usetheme[numbering=none]{metropolis} % , background=dark
+\usetheme[numbering=none,background=\background]{metropolis}
 
 \endinput

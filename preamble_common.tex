@@ -1,0 +1,127 @@
+% Add document information
+\date{\today}
+\author{Moritz Wachsmuth-Melm}
+
+% Fix too many alphabets error
+\newcommand\hmmax{0}
+\newcommand\bmmax{0}
+
+%====================================================%
+%================== Basic packages ==================%
+% Packages that just should be there in any preamble %
+%====================================================%
+\RequirePackage[T1]{fontenc} 
+\RequirePackage[ngerman,english]{babel}
+% \RequirePackage[outputdir=output]{minted} % Code syntax highlighting, has to be loaded before csquotes
+\RequirePackage[final,nopatch=footnote]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
+\RequirePackage[autostyle]{csquotes} % Better quoting, but mainly here because it is recommended for babel and biblatex
+\RequirePackage{graphicx}
+
+%=========%
+% SIUnitx %
+% =========%
+\RequirePackage[
+per-mode=reciprocal-positive-first, % Format of units (fraction or reciprocal)
+locale=US, % Set locale
+range-units=single, % Don't repeat units in number ranges
+list-units=single, % Don't repeat units in number lists
+detect-all, % Apply same font settings to the number/unit as the surrounding text
+forbid-literal-units=true, % Only allow predefined units to enforce consistency
+use-xspace=true, % Correct space after unit
+]{siunitx} % Nice SI units, but also for number formatting/alignment in tables (with s and S column specifier)
+% Declare custom units (mainly chemistry and biology related)
+\DeclareSIUnit{\basepair}{bp} % Basepairs
+\DeclareSIUnit{\base}{b} % Bases
+\DeclareSIUnit{\molar}{\textsc{m}} % Molarity (mol/l)
+\DeclareSIUnit{\mmolar}{\milli\molar} % Short form
+\DeclareSIUnit{\umolar}{\micro\molar} % Short form
+\DeclareSIUnit{\enzymeunit}{U} % Enzyme activity units
+\DeclareSIUnit{\electron}{e\textsuperscript{-}} % Electrons
+\DeclareSIUnit{\xg}{xg} % Centrifugal force (g)
+\DeclareSIUnit{\rpm}{rpm} % Rounds per minute (centrifugation)
+\DeclareSIUnit{\hpi}{hpi} % Hours past infection (virology)
+\DeclareSIUnit{\PFU}{\textsc{PFU}} % Plaque forming units (virology)
+\DeclareSIUnit{\Da}{Da} % Plaque forming units (virology)
+\DeclareSIUnit{\kDa}{kDa} % Plaque forming units (virology)
+\DeclareSIUnit[number-unit-product = {}]{\percent}{\%} % Remove space before percent sign
+
+
+%===========%
+% Chemistry %
+%===========%
+\RequirePackage{chemformula} % Stuff like \ch{MgCl2}
+
+
+%=============%
+% Table stuff %
+%=============%
+\RequirePackage{booktabs} % \toprule, \midrule, \bottomrule, nicer tables (must have!)
+\RequirePackage{multirow} % \multicolumn{num_of_columns}{X}{Content} and \multirow{num_of_rows}{X}{Content}
+
+
+%=========================%
+% Floats, figures, images %
+%=========================%
+\RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
+\usetikzlibrary{positioning}
+\usetikzlibrary{calc}
+\tikzset{
+    tight/.style={inner sep=0, outer sep=0},
+	tile/.style={tight,draw=none,fill=none,align=center}}
+
+
+%=======================%
+% Consistent references %
+%=======================%
+% I could use a package like cleveref,
+% but they always throw errors for some reason
+\newcommand{\tabref}[1]{tab.~\ref{#1}}
+\newcommand{\Tabref}[1]{Tab.~\ref{#1}}
+\newcommand{\tabrefs}[1]{tabs.~\ref{#1}}
+\newcommand{\Tabrefs}[1]{Tabs.~\ref{#1}}
+\newcommand{\figref}[1]{fig.~\ref{#1}}
+\newcommand{\Figref}[1]{Fig.~\ref{#1}}
+\newcommand{\figrefs}[1]{figs.~\ref{#1}}
+\newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
+
+
+%=============%
+% Tikz things %
+%=============%
+\newcommand{\helplines}{\draw[help lines] (0, 0) grid[xstep=0.1, ystep=0.1] (1, 1)}
+
+% \scalebar{node}{length}{text}
+% Length can be either an actual length (e.g. .5\textwidth)
+% or a fraction of the node's width (e.g. 0.1).
+% In the latter case, the node's inner and outer sep must be 0, otherwise the scalebar is wrong!
+\newlength{\scalebarwidth}
+\setlength{\scalebarwidth}{1ex}
+\newcommand{\scalebar}[3]{
+    \begin{tikzonnode}{#1}
+        \draw[line width=\scalebarwidth,draw=white]
+   		    ($(1, 0) + (-.25\scalebarwidth, 0.75\scalebarwidth)$) -- +(-#2, 0)
+		    node[midway, font=\tiny\bfseries, text=black] {#3};
+    \end{tikzonnode}
+}
+
+% Drawing on figures
+\newenvironment{tikzonnode}[1]{%
+    \begin{scope}[shift={(#1.south west)},x={(#1.south east)},y={(#1.north west)}]%
+        }{%
+    \end{scope}%
+}
+\newenvironment{tikzongraphics}[2][width=\textwidth]{
+    \begin{tikzpicture}
+        \node[align=center, anchor=south west,inner sep=0] (image) at (0,0) {\includegraphics[#1]{#2}};
+        \begin{tikzonnode}{image}
+        }{
+        \end{tikzonnode}
+    \end{tikzpicture}
+}
+
+\newcommand{\tikzoverlay}[1]{
+    \tikz[overlay,remember picture] {
+        #1
+    }
+}
+\endinput
