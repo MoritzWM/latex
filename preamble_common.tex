@@ -62,12 +62,19 @@ use-xspace=true, % Correct space after unit
 %=========================%
 % Floats, figures, images %
 %=========================%
+\RequirePackage[
+    inkscapearea=page,
+    inkscapeformat=png,
+    inkscapedpi=600,
+    % inkscapelatex=false
+]{svg}
 \RequirePackage{tikz} % Figures you can draw on (text, lines, braces, stuff)
 \usetikzlibrary{positioning}
 \usetikzlibrary{calc}
 \tikzset{
     tight/.style={inner sep=0, outer sep=0},
 	tile/.style={tight,draw=none,fill=none,align=center}}
+
 
 
 %=======================%

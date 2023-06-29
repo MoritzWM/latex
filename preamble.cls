@@ -18,6 +18,13 @@
 \DeclareOption{colorlinks}{
 	\renewcommand{\colorlinksenabled}{true}
 }
+\newcommand{\setspace}{}
+\DeclareOption{onehalfspacing}{
+	\renewcommand{\setspace}{\RequirePackage[onehalfspacing]{setspace}}
+}
+\DeclareOption{doublespacing}{
+	\renewcommand{\setspace}{\RequirePackage[doublespacing]{setspace}}
+}
 
 % Documentclasses:
 % srcbook
@@ -63,6 +70,12 @@ colorlinks=\colorlinksenabled, % Make links (as in TOC or references to figures)
 bookmarks=true, % Make bookmarks
 final, % Make links, no matter if draft mode or not
 ]{hyperref} 
+% Automatically add references.bib if it exists and print the bibliography
+\IfFileExists{references.bib}{%
+    \addbibresource{references.bib}
+    \AtEndDocument{\emergencystretch=1em\printbibliography{}}
+}
+
 
 
 %========================%
@@ -71,13 +84,13 @@ final, % Make links, no matter if draft mode or not
 % \RequirePackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
 \DeclarePrintbibliographyDefaults{title=References}
 \RequirePackage{xspace} % In commands, \xspace makes a space after the command only if there is a word. In case of punctuation, it is omitted.
-\RequirePackage[onehalfspacing]{setspace}
+\setspace{}
 \RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
 \RequirePackage{underscore} % underscore behaves properly in text mode
 \RequirePackage[draft=false]{scrlayer-scrpage} % Nice headers and footers
-% \RequirePackage{ebgaramond-maths}
+\RequirePackage{ebgaramond-maths}
 % \RequirePackage{lmodern}
-\RequirePackage{kpfonts}
+% \RequirePackage{kpfonts}
 \acsgeometry{}
 
 %===============%
