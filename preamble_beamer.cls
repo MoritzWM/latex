@@ -16,6 +16,8 @@
 \ProcessOptions\relax
 \LoadClass[aspectratio=169]{beamer}
 
+
+\input{preamble_common.tex}
 %==================================%
 % Custom environments and commands %
 %==================================%
