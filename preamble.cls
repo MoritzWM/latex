@@ -99,6 +99,20 @@ final, % Make links, no matter if draft mode or not
 \RequirePackage[obeyFinal]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
 \AtBeginDocument{\listoftodos}
 
+%=======================%
+% Consistent references %
+%=======================%
+% I could use a package like cleveref,
+% but they always throw errors for some reason
+\newcommand{\tabref}[1]{tab.~\ref{#1}}
+\newcommand{\Tabref}[1]{Tab.~\ref{#1}}
+\newcommand{\tabrefs}[1]{tabs.~\ref{#1}}
+\newcommand{\Tabrefs}[1]{Tabs.~\ref{#1}}
+\newcommand{\figref}[1]{fig.~\ref{#1}}
+\newcommand{\Figref}[1]{Fig.~\ref{#1}}
+\newcommand{\figrefs}[1]{figs.~\ref{#1}}
+\newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
+
 % ============================================================================%
 % ================= Fix booktabs - xltabular incompatibility =================%
 % https://tex.stackexchange.com/questions/522920/xltabular-breaking-booktabs %
