@@ -26,28 +26,21 @@
 	\renewcommand{\setspace}{\RequirePackage[doublespacing]{setspace}}
 }
 
-% Documentclasses:
-% srcbook
-% scrartcl
-\DeclareOption*{\PassOptionsToClass{\CurrentOption}{scrartcl}}
+\newcommand{\thedocumentclass}{%
+    %scrbook%
+    %scrreprt%
+    scrartcl%
+}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{\thedocumentclass}}
 \ProcessOptions\relax
 \LoadClass[
 a4paper,
-oneside,
 cleardoublepage=empty,
-notitlepage,
 toc=bibliography,
 toc=index,
-]{scrartcl}
-
-%===============================%
-% Extra settings for draft mode %
-%===============================%
-\RequirePackage{ifdraft}
-\ifdraft{
-	\RequirePackage{silence}
-	\WarningFilter{latex}{Marginpar on page} % Todonotes cause this warning
-}{}
+% oneside,
+% notitlepage,
+]{\thedocumentclass}
 
 %================== Basic packages ==================%
 % Packages that just should be there in any preamble %
