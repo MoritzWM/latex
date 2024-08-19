@@ -83,9 +83,9 @@ final, % Make links, no matter if draft mode or not
 \RequirePackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
 \RequirePackage{underscore} % underscore behaves properly in text mode
 \RequirePackage[draft=false]{scrlayer-scrpage} % Nice headers and footers
-\RequirePackage{ebgaramond-maths}
+% \RequirePackage{ebgaramond-maths}
 % \RequirePackage{lmodern}
-% \RequirePackage{kpfonts}
+\RequirePackage{kpfonts}
 \acsgeometry{}
 
 %===============%
