@@ -70,11 +70,6 @@ colorlinks=\colorlinksenabled, % Make links (as in TOC or references to figures)
 bookmarks=true, % Make bookmarks
 final, % Make links, no matter if draft mode or not
 ]{hyperref} 
-% Automatically add references.bib if it exists and print the bibliography
-\IfFileExists{references.bib}{%
-    \addbibresource{references.bib}
-    \AtEndDocument{\emergencystretch=1em\printbibliography{}}
-}
 
 
 
