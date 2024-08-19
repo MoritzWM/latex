@@ -11,6 +11,8 @@
 % Packages that just should be there in any preamble %
 %====================================================%
 \RequirePackage[T1]{fontenc} 
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[full]{textcomp} % required for older texlive distributions when using kpfonts
 \RequirePackage[ngerman,english]{babel}
 % \RequirePackage[outputdir=output]{minted} % Code syntax highlighting, has to be loaded before csquotes
 \RequirePackage[final,nopatch=footnote]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
@@ -74,6 +76,22 @@ use-xspace=true, % Correct space after unit
 \tikzset{
     tight/.style={inner sep=0, outer sep=0},
 	tile/.style={tight,draw=none,fill=none,align=center}}
+
+
+%===============%
+% Miscellaneous %
+%===============%
+% Print text width and height in draft mode
+\makeatletter
+\def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
+\makeatother
+\RequirePackage{ifdraft}
+\ifdraft{
+    \AtEndDocument{\noindent
+        text width: \the\textwidth : \convertto{mm}{\textwidth} mm\\
+        text height: \the\textheight : \convertto{mm}{\textheight} mm
+    }
+}
 
 %=============%
 % Tikz things %
