@@ -88,12 +88,6 @@ final, % Make links, no matter if draft mode or not
 \RequirePackage{kpfonts}
 \acsgeometry{}
 
-%===============%
-% Miscellaneous %
-% ===============%
-\RequirePackage[obeyFinal]{todonotes} % Allows TODO notes in the text with \todo{note}, then can make a \listoftodos
-\AtBeginDocument{\listoftodos}
-
 %=======================%
 % Consistent references %
 %=======================%
