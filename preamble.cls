@@ -13,11 +13,6 @@
 \DeclareOption{geometry}{
 	\renewcommand{\acsgeometry}{\RequirePackage[left=1.50cm, right=1.50cm, top=3.00cm, bottom=3.00cm]{geometry}}
 }
-% Colorlinks yes or no (default no)
-\newcommand{\colorlinksenabled}{false}
-\DeclareOption{colorlinks}{
-	\renewcommand{\colorlinksenabled}{true}
-}
 \newcommand{\setspace}{}
 \DeclareOption{onehalfspacing}{
 	\renewcommand{\setspace}{\RequirePackage[onehalfspacing]{setspace}}
@@ -59,7 +54,7 @@ hyperref=true
 \RequirePackage[
 pdfpagelabels=true, % Sets PDF page labels, so that PDF readers can detect different numbering styles (e.g. roman in \frontmatter)
 plainpages=false, % Fixes errors caused by page numbering resets (as by \frontmatter, \mainmatter and \backmatter)
-colorlinks=\colorlinksenabled, % Make links (as in TOC or references to figures) font red instead of drawing a red box around them. Colorlinks are also visible in print, boxes are not
+hidelinks, % Hidel links (no colorlinks, no link boxes)
 bookmarks=true, % Make bookmarks
 final, % Make links, no matter if draft mode or not
 ]{hyperref} 
