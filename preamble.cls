@@ -75,20 +75,8 @@ final, % Make links, no matter if draft mode or not
 % \RequirePackage{lmodern}
 \RequirePackage{kpfonts}
 \acsgeometry{}
+\usepackage{cleveref} % Automatic nice references with \cref, \Cref and \crefrange
 
-%=======================%
-% Consistent references %
-%=======================%
-% I could use a package like cleveref,
-% but they always throw errors for some reason
-\newcommand{\tabref}[1]{tab.~\ref{#1}}
-\newcommand{\Tabref}[1]{Tab.~\ref{#1}}
-\newcommand{\tabrefs}[1]{tabs.~\ref{#1}}
-\newcommand{\Tabrefs}[1]{Tabs.~\ref{#1}}
-\newcommand{\figref}[1]{fig.~\ref{#1}}
-\newcommand{\Figref}[1]{Fig.~\ref{#1}}
-\newcommand{\figrefs}[1]{figs.~\ref{#1}}
-\newcommand{\Figrefs}[1]{Figs.~\ref{#1}}
 
 % ============================================================================%
 % ================= Fix booktabs - xltabular incompatibility =================%
