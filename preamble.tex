@@ -1,0 +1,92 @@
+\RequirePackage[l2tabu, orthodox]{nag}
+
+\documentclass[
+draft,
+a4paper,
+cleardoublepage=empty,
+toc=bibliography,
+toc=index,
+% oneside,
+% notitlepage,
+]{scrbook} % scrartcl, scrreprt, scrbook
+
+%================%
+% Basic packages %
+%================%
+\usepackage{fontsetup} % For greek letters and to define fonts with \setmainfont or \setsansfont
+\setmainfont{EB Garamond}
+% \setmainfont{TeX Gyre Pagella}
+% \setsansfont{TeX Gyre Adventor}
+\usepackage{polyglossia} % Multi language support
+\setmainlanguage{english}
+\setotherlanguage{german}
+\usepackage[final,nopatch=footnote]{microtype} % Better font spacing and stuff. Final option provides that it is not disabled in draft mode
+\usepackage[autostyle]{csquotes} % Better quoting
+\usepackage{graphicx}
+\usepackage[
+backend=biber,
+doi=true,
+url=false,
+eprint=false,
+style=numeric-comp, % Haven't decided on a style yet
+sorting=none, % Sorts in citation order, which is the only sorting method that makes sense if using numeric style
+autocite=inline, % Options: plain,inline,footnote,superscript,
+hyperref=true
+]{biblatex} % Biblatex, integrate with zotero using: https://github.com/retorquere/zotero-better-bibtex
+\usepackage[
+pdfpagelabels=true, % Sets PDF page labels, so that PDF readers can detect different numbering styles (e.g. roman in \frontmatter)
+plainpages=false, % Fixes errors caused by page numbering resets (as by \frontmatter, \mainmatter and \backmatter)
+hidelinks, % Hidel links (no colorlinks, no link boxes)
+bookmarks=true, % Make bookmarks
+final, % Make links, no matter if draft mode or not
+]{hyperref}
+\usepackage{amsmath} % required for cleveref
+\usepackage{cleveref} % Automatic nice references with \cref, \Cref and \crefrange
+\usepackage{subfiles} % Multi-file latex projects
+
+
+%==================%
+% Styling packages %
+%==================%
+% \usepackage{emptypage} % Ensures removed headers and footers on empty pages (like the one after the title)
+\DeclarePrintbibliographyDefaults{title=References}
+\usepackage{setspace} % \singlespacing, \onehalfspacing, \doublespacing
+\usepackage{pdflscape} % Landscape pdf pages with \begin{landscape} ... \end{landscape}
+\usepackage{underscore} % underscore behaves properly in text mode
+\usepackage[draft=false]{scrlayer-scrpage} % Nice headers and footers
+
+
+%========================%
+% Miscellaneous packages %
+%========================%
+\usepackage{chemformula} % Stuff like \ch{MgCl2}
+\usepackage{booktabs} % \toprule, \midrule, \bottomrule, nicer tables (must have!)
+\usepackage{multirow} % \multicolumn{num_of_columns}{X}{Content} and \multirow{num_of_rows}{X}{Content}
+\usepackage[
+    inkscapearea=page,
+    inkscapeformat=pdf,
+    inkscapedpi=300,
+    inkscapelatex=false,
+    % pretex=\sffamily\tiny,
+]{svg} % Include SVG images
+\svgpath{{figures/}}
+
+%===============%
+% Miscellaneous %
+%===============%
+% Center figures by default
+% https://tex.stackexchange.com/questions/2651/should-i-use-center-or-centering-for-figures-and-tables
+\makeatletter
+\g@addto@macro\@floatboxreset\centering
+\makeatother
+% Print text width and height at the end of the document in draft mode
+\makeatletter
+\def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
+\makeatother
+\usepackage{ifdraft}
+\ifdraft{
+    \AtEndDocument{\noindent
+        text width: \the\textwidth : \convertto{mm}{\textwidth} mm\\
+        text height: \the\textheight : \convertto{mm}{\textheight} mm
+    }
+}

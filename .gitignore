@@ -2,8 +2,5 @@
 !.gitignore
 !LICENSE
 !main.tex
-!main.tex.latexmain
-!preamble_beamer.cls
-!preamble.cls
-!preamble_common.tex
+!preamble.tex
 !README.md
