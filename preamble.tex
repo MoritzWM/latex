@@ -74,19 +74,23 @@ final, % Make links, no matter if draft mode or not
 %===============%
 % Miscellaneous %
 %===============%
+% Caption with the first sentence as figure title in bold
+% https://tex.stackexchange.com/questions/243982/automatic-way-to-use-the-first-sentence-of-the-figure-caption-as-the-short-capti/243986#243986
+\def\splitter #1. #2@@{\caption[#1]{\textbf{#1.} #2}}
+\newcommand{\autocaption}[1]{\splitter #1@@}
 % Center figures by default
 % https://tex.stackexchange.com/questions/2651/should-i-use-center-or-centering-for-figures-and-tables
 \makeatletter
 \g@addto@macro\@floatboxreset\centering
 \makeatother
-% Print text width and height at the end of the document in draft mode
+% Print text width and height in draft mode
 \makeatletter
 \def\convertto#1#2{\strip@pt\dimexpr #2*65536/\number\dimexpr 1#1}
 \makeatother
 \usepackage{ifdraft}
 \ifdraft{
     \AtEndDocument{\noindent
-        text width: \the\textwidth : \convertto{mm}{\textwidth} mm\\
-        text height: \the\textheight : \convertto{mm}{\textheight} mm
+        text width: \the\textwidth{}; \convertto{mm}{\textwidth}~mm\\
+        text height: \the\textheight{}; \convertto{mm}{\textheight}~mm
     }
 }{}
